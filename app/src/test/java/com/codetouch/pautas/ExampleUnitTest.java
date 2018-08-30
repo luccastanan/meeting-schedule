@@ -1,4 +1,4 @@
-package com.codetouch.pauta;
+package com.codetouch.pautas;
 
 import org.junit.Test;
 

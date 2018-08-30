@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Pauta</string>
+    <string name="app_name">Capptan Pautas</string>
+    <string name="title">Título</string>
+    <string name="description">Descrição</string>
+    <string name="save">Salvar</string>
+    <string name="details">Detalhes</string>
+    <string name="actor">Author</string>
+    <string name="new_schedule">Nova pauta</string>
 </resources>

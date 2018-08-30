@@ -1,4 +1,4 @@
-package com.codetouch.pauta;
+package com.codetouch.pautas;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.codetouch.pauta", appContext.getPackageName());
+        assertEquals("com.codetouch.pautas", appContext.getPackageName());
     }
 }
