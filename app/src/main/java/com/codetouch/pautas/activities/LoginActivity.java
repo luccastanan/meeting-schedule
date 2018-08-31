@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int id= db.login(edtEmail.getText().toString(), edtPass.getText().toString());
+                int id = db.login(edtEmail.getText().toString(), edtPass.getText().toString());
                 if (id != -1) {
                     Utilities.saveUserId(LoginActivity.this, id);
                     finish();

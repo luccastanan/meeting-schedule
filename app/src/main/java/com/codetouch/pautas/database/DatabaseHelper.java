@@ -25,12 +25,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
-                "id INT PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name VARCHAR(255), " +
                 "email VARCHAR(255), " +
                 "pass VARCHAR(255));");
         db.execSQL("CREATE TABLE IF NOT EXISTS schedules (" +
-                "id INT PRIMARY KEY, " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title VARCHAR(255), " +
                 "description VARCHAR(255), " +
                 "details TEXT," +
@@ -59,8 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public List<Schedule> listSchedule() {
-        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM schedules", null);
+    public List<Schedule> listSchedule(boolean status) {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM schedules WHERE status = ?", new String[]{String.valueOf(status ? 1 : 0)});
         List<Schedule> scheduleList = new ArrayList<>();
         while (cursor.moveToNext()) {
             scheduleList.add(
@@ -104,6 +104,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String selectUserName(int userId) {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT name FROM users WHERE id = ?", new String[]{String.valueOf(userId)});
+        String name = "";
+        if (cursor.moveToFirst())
+            name = cursor.getString(0);
+        cursor.close();
+        return name;
     }
 
     public int login(String email, String pass) {

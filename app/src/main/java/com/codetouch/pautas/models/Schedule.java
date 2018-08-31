@@ -108,7 +108,7 @@ public class Schedule implements Parcelable {
         this.status = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Schedule> CREATOR = new Parcelable.Creator<Schedule>() {
+    public static final Creator<Schedule> CREATOR = new Creator<Schedule>() {
         @Override
         public Schedule createFromParcel(Parcel source) {
             return new Schedule(source);

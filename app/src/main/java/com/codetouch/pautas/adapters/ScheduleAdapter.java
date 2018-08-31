@@ -1,5 +1,7 @@
 package com.codetouch.pautas.adapters;
 
+import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
@@ -12,19 +14,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.codetouch.pautas.R;
+import com.codetouch.pautas.database.DatabaseHelper;
 import com.codetouch.pautas.models.Schedule;
 
 import java.util.List;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
+    private DatabaseHelper db;
     private List<Schedule> scheduleList;
     private int ePosition = -1;
     private int pPosition = -1;
 
     private ISchedules onSchedules;
 
-    public ScheduleAdapter(List<Schedule> scheduleList, ISchedules onSchedules) {
+    public ScheduleAdapter(DatabaseHelper db, List<Schedule> scheduleList, ISchedules onSchedules) {
+        this.db = db;
         this.scheduleList = scheduleList;
         this.onSchedules = onSchedules;
     }
@@ -43,6 +48,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
         holder.txvTitle.setText(schedule.getTitle());
         holder.txvDescription.setText(schedule.getDescription());
         holder.txvDetails.setText(schedule.getDetails());
+        holder.txvAuthor.setText(db.selectUserName(schedule.getAuthorId()));
         holder.btnAction.setText(schedule.isStatus() ? R.string.finalize : R.string.reopen);
 
         final boolean isExpanded = position == ePosition;
@@ -67,7 +73,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
             public void onClick(View view) {
                 schedule.setStatus(!schedule.isStatus());
                 onSchedules.onAction(schedule);
-                notifyItemChanged(position);
+                scheduleList.remove(schedule);
+                notifyItemRemoved(position);
             }
         });
     }
@@ -81,7 +88,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 
         CardView layout;
         ConstraintLayout lytDetails;
-        TextView txvTitle, txvDescription, txvDetails;
+        TextView txvTitle, txvDescription, txvDetails, txvAuthor;
         Button btnAction;
 
         MyViewHolder(View itemView) {
@@ -91,11 +98,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
             txvDescription = itemView.findViewById(R.id.txv_description);
             lytDetails = itemView.findViewById(R.id.lyt_details);
             txvDetails = itemView.findViewById(R.id.txv_details);
+            txvAuthor = itemView.findViewById(R.id.txv_author);
             btnAction = itemView.findViewById(R.id.btn_action);
         }
+
+
     }
 
-    public interface ISchedules {
+    public interface ISchedules extends Parcelable {
         void onAction(Schedule schedule);
     }
 }
