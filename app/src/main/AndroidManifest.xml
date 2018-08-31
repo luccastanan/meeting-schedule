@@ -12,14 +12,17 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="sensor">
+            android:screenOrientation="sensor"></activity>
+        <activity android:name=".activities.AddActivity" />
+        <activity android:name=".activities.LoginActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AddActivity"></activity>
+        <activity android:name=".activities.RegisterActivity" />
     </application>
 
 </manifest>

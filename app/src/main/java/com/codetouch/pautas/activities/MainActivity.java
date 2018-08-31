@@ -15,7 +15,6 @@ import com.codetouch.pautas.adapters.ScheduleAdapter;
 import com.codetouch.pautas.database.DatabaseHelper;
 import com.codetouch.pautas.models.Schedule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,18 +35,18 @@ public class MainActivity extends AppCompatActivity {
 
         layout = findViewById(R.id.layout);
         rcvSchedules = findViewById(R.id.rcv_schedules);
-        scheduleList = db.list();
+        scheduleList = db.listSchedule();
 
         scheduleAdapter = new ScheduleAdapter(scheduleList, new ScheduleAdapter.ISchedules() {
             @Override
             public void onAction(Schedule schedule) {
-
+                db.updateSchedule(schedule);
             }
         });
 
         rcvSchedules.setAdapter(scheduleAdapter);
 
-        findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivityForResult(new Intent(MainActivity.this, AddActivity.class), Constants.RequestCode.NEW_SCHEDULE);

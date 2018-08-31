@@ -2,6 +2,8 @@ package com.codetouch.pautas.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,19 +12,20 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.codetouch.pautas.R;
-import com.codetouch.pautas.Utilities;
 import com.codetouch.pautas.database.DatabaseHelper;
 import com.codetouch.pautas.models.Schedule;
+import com.codetouch.pautas.models.User;
 
-public class AddActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
-    private EditText edtTitle, edtDescription, edtDetails, edtActor;
+    private ConstraintLayout layout;
+    private EditText edtName, edtEmail, edtPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_register);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -30,26 +33,24 @@ public class AddActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
-        edtTitle = findViewById(R.id.edt_title);
-        edtDescription = findViewById(R.id.edt_description);
-        edtDetails = findViewById(R.id.edt_details);
-        edtActor = findViewById(R.id.edt_actor);
+        layout = findViewById(R.id.layout);
+        edtName = findViewById(R.id.edt_name);
+        edtEmail = findViewById(R.id.edt_email);
+        edtPass = findViewById(R.id.edt_pass);
 
         findViewById(R.id.btn_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Schedule schedule = new Schedule(
-                        edtTitle.getText().toString(),
-                        edtDescription.getText().toString(),
-                        edtDetails.getText().toString(),
-                        Utilities.getUserId(AddActivity.this));
-                boolean res = db.insertSchedule(schedule);
+                User user = new User(
+                        edtName.getText().toString(),
+                        edtEmail.getText().toString(),
+                        edtPass.getText().toString());
+                boolean res = db.insertUser(user);
 
-                Intent rIntent = new Intent();
                 if (res)
-                    rIntent.putExtra("schedule", schedule);
-                setResult(res ? Activity.RESULT_OK : Activity.RESULT_CANCELED, rIntent);
-                AddActivity.this.finish();
+                    finish();
+                else
+                    Snackbar.make(layout, R.string.failed_save_user, Snackbar.LENGTH_LONG).show();
             }
         });
     }

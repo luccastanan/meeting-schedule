@@ -10,4 +10,11 @@
     <string name="reopen">Reabrir</string>
     <string name="schedule_saved">Pauta salva</string>
     <string name="schedule_error">Falha ao salvar pauta</string>
+    <string name="register">Cadastro</string>
+    <string name="name">Nome</string>
+    <string name="email">E-mail</string>
+    <string name="failed_save_user">Falha ao salvar usuário</string>
+    <string name="pass">Senha</string>
+    <string name="login">Entrar</string>
+    <string name="invalid_login">Dados incorretos</string>
 </resources>

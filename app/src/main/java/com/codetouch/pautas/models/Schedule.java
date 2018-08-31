@@ -17,6 +17,7 @@ public class Schedule implements Parcelable {
         this.description = description;
         this.details = details;
         this.authorId = authorId;
+        this.status = true;
     }
 
     public Schedule(int id, String title, String description) {

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.codetouch.pautas.models.Schedule;
+import com.codetouch.pautas.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +24,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
                 "id INT PRIMARY KEY, " +
                 "name VARCHAR(255), " +
                 "email VARCHAR(255), " +
                 "pass VARCHAR(255));");
         db.execSQL("CREATE TABLE IF NOT EXISTS schedules (" +
                 "id INT PRIMARY KEY, " +
+                "title VARCHAR(255), " +
                 "description VARCHAR(255), " +
                 "details TEXT," +
                 "author_id INT," +
                 "status INT, " +
-                "FOREIGN KEY (author_id) REFERENCES users (id));");*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS schedules (" +
-                "id INT PRIMARY KEY, " +
-                "title VARCHAR(255), " +
-                "description VARCHAR(255), " +
-                "details TEXT, " +
-                "status INT);");
+                "FOREIGN KEY (author_id) REFERENCES users (id));");
     }
 
     @Override
@@ -48,8 +44,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insert(Schedule schedule) {
+    public boolean insertSchedule(Schedule schedule) {
         ContentValues values = new ContentValues();
+        values.put("title", schedule.getTitle());
         values.put("description", schedule.getDescription());
         values.put("details", schedule.getDetails());
         values.put("status", schedule.isStatus() ? 1 : 0);
@@ -62,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public List<Schedule> list() {
+    public List<Schedule> listSchedule() {
         Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM schedules", null);
         List<Schedule> scheduleList = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -76,6 +73,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             cursor.getInt(cursor.getColumnIndex("status")) == 1)
             );
         }
+        cursor.close();
         return scheduleList;
+    }
+
+    public boolean updateSchedule(Schedule schedule) {
+        ContentValues values = new ContentValues();
+        values.put("title", schedule.getTitle());
+        values.put("description", schedule.getDescription());
+        values.put("details", schedule.getDetails());
+        values.put("status", schedule.isStatus() ? 1 : 0);
+        try {
+            long count = getWritableDatabase().update("schedules", values, "id = ?", new String[]{String.valueOf(schedule.getId())});
+            return count > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean insertUser(User user) {
+        ContentValues values = new ContentValues();
+        values.put("name", user.getName());
+        values.put("email", user.getEmail());
+        values.put("pass", user.getPass());
+        try {
+            long rowId = getWritableDatabase().insert("users", null, values);
+            return rowId > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int login(String email, String pass) {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT id FROM users WHERE email = ? AND pass = ?", new String[]{email, pass});
+        int id = -1;
+        if (cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+        cursor.close();
+        return id;
     }
 }
