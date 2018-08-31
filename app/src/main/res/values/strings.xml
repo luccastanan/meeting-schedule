@@ -4,6 +4,10 @@
     <string name="description">Descrição</string>
     <string name="save">Salvar</string>
     <string name="details">Detalhes</string>
-    <string name="actor">Author</string>
+    <string name="actor">Autor</string>
     <string name="new_schedule">Nova pauta</string>
+    <string name="finalize">Finalizar</string>
+    <string name="reopen">Reabrir</string>
+    <string name="schedule_saved">Pauta salva</string>
+    <string name="schedule_error">Falha ao salvar pauta</string>
 </resources>

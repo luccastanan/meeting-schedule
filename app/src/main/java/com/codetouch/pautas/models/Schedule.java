@@ -1,6 +1,9 @@
 package com.codetouch.pautas.models;
 
-public class Schedule {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Schedule implements Parcelable {
 
     private int id;
     private String title;
@@ -8,6 +11,13 @@ public class Schedule {
     private String details;
     private int authorId;
     private boolean status;
+
+    public Schedule(String title, String description, String details, int authorId) {
+        this.title = title;
+        this.description = description;
+        this.details = details;
+        this.authorId = authorId;
+    }
 
     public Schedule(int id, String title, String description) {
         this.id = id;
@@ -71,4 +81,41 @@ public class Schedule {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeString(this.details);
+        dest.writeInt(this.authorId);
+        dest.writeByte(this.status ? (byte) 1 : (byte) 0);
+    }
+
+    protected Schedule(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.description = in.readString();
+        this.details = in.readString();
+        this.authorId = in.readInt();
+        this.status = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Schedule> CREATOR = new Parcelable.Creator<Schedule>() {
+        @Override
+        public Schedule createFromParcel(Parcel source) {
+            return new Schedule(source);
+        }
+
+        @Override
+        public Schedule[] newArray(int size) {
+            return new Schedule[size];
+        }
+    };
 }
